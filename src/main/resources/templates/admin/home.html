@@ -1,0 +1,146 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+				xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+	<title>Admin Home </title>
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" th:href="@{home}">Home</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" th:href="@{articles/list}" th:text="Articles"> 
+        	<span class="sr-only">(current)</span> 
+        </a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" th:href="@{users/list}" th:text="Users"> 
+        	<span class="sr-only">(current)</span> 
+        </a>
+      </li>
+    </ul>
+  </div>
+  
+  <div class="button-group" sec:authorize="!isFullyAuthenticated()">
+    <a href="/login">Login</a>
+    <a href="/register">Register</a>
+</div>
+
+<div class="button-group" sec:authorize="isFullyAuthenticated()">
+    <form action="#" th:action="@{/logout}" method="POST">
+			<input type="submit" value="Logout"> 			 
+	</form>
+</div>
+  
+  <!--  
+    <div>
+	<a class="navbar-brand" th:href="@{/login}">Login</a>
+  </div>
+	<form action="#" th:action="@{/logout}" method="POST">
+			<input type="submit" value="Logout"> 			 
+	</form>
+	-->
+	
+</nav>
+
+
+	<div class="container">
+		<br>
+		<h3>Articles </h3>
+		<hr>
+		<!-- Add a button -->
+		<a th:href="@{/admin/articles/list}"
+			class="btn btn-primary btn-sm mb-3">
+			<b>Show All Articles</b>
+		</a>
+		<!-- Add a button -->
+		<a th:href="@{/admin/articles/add}"
+			class="btn btn-primary btn-sm mb-3">
+			<b>Add Article</b>
+		</a>
+		<table class="table table-bordered table-striped">
+			<thead class="thead-dark">
+				<tr>
+					<th>Article title</th>
+					<th>Description</th>
+					<th>Edit</th>
+				</tr>
+			</thead>
+			
+			<tbody>
+				<tr th:each="tempArticle : ${articles}">
+				
+					<td th:text="${tempArticle.title}" />	
+					<td th:text="${tempArticle.description}" />	
+					
+					<td>
+						<!-- Add "Read More" button/link -->
+						<a th:href="@{/admin/article/editArticle(articleId=${tempArticle.id})}"
+						   class="btn btn-info btn-sm">
+							Edit Article
+						</a>
+						
+						<!-- Add "delete" button/link -->					
+						<a th:href="@{/admin/article/delete(articleId=${tempArticle.id})}"
+						   class="btn btn-danger btn-sm"
+						   onclick="if (!(confirm('Are you sure you want to delete this article?'))) return false">
+							Delete Article  
+						</a>
+										
+					</td>
+				</tr>
+			</tbody>		
+		</table>
+	</div>
+	
+	<div class="container">
+		<hr>
+		<h3>Users </h3>
+		<hr>
+		<!-- Add a button -->
+		<a th:href="@{/admin/users/list}"
+			class="btn btn-primary btn-sm mb-3">
+			<b>Show All Users</b>
+		</a>
+		<table class="table table-bordered table-striped">
+			<thead class="thead-dark">
+				<tr>
+					<th>User Name</th>
+					<th>Email</th>
+					<th>authorities</th>
+				</tr>
+			</thead>
+			
+			<tbody>
+				<tr th:each="tempUser : ${users}">
+					<td th:text="${tempUser.userName}" />	
+					<td th:text="${tempUser.email}" />
+					<td  >
+					<optional th:each="tempauthority : ${tempUser.authorities}" >
+						<t th:text="${tempauthority.authority}" />
+					</optional>
+					</td>
+				</tr>
+			</tbody>		
+		</table>
+	</div>
+	
+
+</body>
+
+</html>

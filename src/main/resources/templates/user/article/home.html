@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+				xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+	<title>Articles</title>
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" th:href="@{home}">Home</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active" th:each="tempCategory : ${categories}">
+        <a class="nav-link" th:href="@{category(category=${tempCategory.category})}" th:text="${tempCategory.category}"> 
+        	<span class="sr-only">(current)</span> 
+        </a>
+      </li>
+    </ul>
+  </div>
+  
+  <div class="button-group" sec:authorize="!isFullyAuthenticated()">
+    <a href="/login">Login</a>
+    <a href="/register">Register</a>
+</div>
+
+<div class="button-group" sec:authorize="isFullyAuthenticated()">
+    <form action="#" th:action="@{/logout}" method="POST">
+			<input type="submit" value="Logout"> 			 
+	</form>
+</div>
+  
+  <!--  
+    <div>
+	<a class="navbar-brand" th:href="@{/login}">Login</a>
+  </div>
+	<form action="#" th:action="@{/logout}" method="POST">
+			<input type="submit" value="Logout"> 			 
+	</form>
+	-->
+	
+</nav>
+
+<div class="container">
+
+	<br>
+	<h3>Articles </h3>
+	<hr>
+	
+	<table class="table table-bordered table-striped">
+		<thead class="thead-dark">
+			<tr>
+				<th>Article title</th>
+				<th>Description</th>
+				<th>Read More</th>
+			</tr>
+		</thead>
+		
+		<tbody>
+			<tr th:each="tempArticle : ${articles}">
+			
+				<td th:text="${tempArticle.title}" />	
+				<td th:text="${tempArticle.description}" />	
+				
+				<td>
+					<!-- Add "Read More" button/link -->
+					<a th:href="@{/user/article/readMore(articleId=${tempArticle.id})}"
+					   class="btn btn-info btn-sm">
+						Read More
+					</a>				
+				</td>
+				
+				
+			</tr>
+		</tbody>		
+	</table>
+	
+</div>
+	
+</body>
+</html>
+
+<!--  
+	<div th:text="${#authentication.name} "></div>
+	<form action="#" th:action="@{/logout}" method="POST">
+			<input type="submit" value="Logout"> 			 
+	</form>
+-->

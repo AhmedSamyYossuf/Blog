@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+				xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+	<title th:text="${article.title}"> </title>
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" th:href="@{home}">Home</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active" th:each="tempCategory : ${categories}">
+        <a class="nav-link" th:href="@{category(category=${tempCategory.category})}" th:text="${tempCategory.category}"> 
+        	<span class="sr-only">(current)</span> 
+        </a>
+      </li>
+    </ul>
+  </div>
+  
+  <div class="button-group" sec:authorize="!isFullyAuthenticated()">
+    <a href="/login">Login</a>
+    <a href="/register">Register</a>
+  </div>
+
+<div class="button-group" sec:authorize="isFullyAuthenticated()">
+    <form action="#" th:action="@{/logout}" method="POST">
+			<input type="submit" value="Logout"> 			 
+	</form>
+</div>
+
+</nav>
+
+	<div class="container">
+	
+		<h3 th:text="${article.title}" ></h3>
+		<hr>
+		<p th:text="${article.articleBody}" >
+		<hr>
+		<hr>
+		<option th:each="tempComment : ${article.comments}">
+			<p th:text="${tempComment.comment}"></p>
+		</option>
+		<hr>
+		
+		<div class="button-group" sec:authorize="!isFullyAuthenticated()">
+		<p>please 
+			<a href="/login"><b>Login</b></a>
+			/
+			<a href="/register"><b>Register</b></a> 
+			to add new Comment  </p>
+		</div>
+		
+		<div class="button-group" sec:authorize="isFullyAuthenticated()">
+			<textarea rows="3" cols="40" name="newComment"
+					  placeholder="add new comment"></textarea> 
+			<br>
+			<a  th:href="@{/user/article/addcomment(articleId=${article.id} , comment=${comment} )}">
+				<input type="submit" value="submit">	
+			</a>		 
+		</div>
+		
+		<hr>
+		<a th:href="@{home}">Back to Articles List</a>
+		
+	</div>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+

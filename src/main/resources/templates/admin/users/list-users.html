@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+				xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+	<title>Users</title>
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" th:href="@{/admin/home}">Home</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" th:href="@{/admin/articles/list}" th:text="Articles"> 
+        	<span class="sr-only">(current)</span> 
+        </a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" th:href="@{list}" th:text="Users"> 
+        	<span class="sr-only">(current)</span> 
+        </a>
+      </li>
+    </ul>
+  </div>
+  
+  <div class="button-group" sec:authorize="!isFullyAuthenticated()">
+    <a href="/login">Login</a>
+    <a href="/register">Register</a>
+</div>
+
+<div class="button-group" sec:authorize="isFullyAuthenticated()">
+    <form action="#" th:action="@{/logout}" method="POST">
+			<input type="submit" value="Logout"> 			 
+	</form>
+</div>
+  
+  <!--  
+    <div>
+	<a class="navbar-brand" th:href="@{/login}">Login</a>
+  </div>
+	<form action="#" th:action="@{/logout}" method="POST">
+			<input type="submit" value="Logout"> 			 
+	</form>
+	-->
+	
+</nav>
+
+<div class="container">
+
+	<br>
+	<h3>Users </h3>
+	<hr>
+	
+	<table class="table table-bordered table-striped">
+		<thead class="thead-dark">
+			<tr>
+				<th>User Name</th>
+				<th>Email</th>
+				<th>authorities</th>
+			</tr>
+		</thead>
+		
+		<tbody>
+			<tr th:each="tempUser : ${users}">
+				<td th:text="${tempUser.userName}" />	
+				<td th:text="${tempUser.email}" />
+				<td  >
+				<optional th:each="tempauthority : ${tempUser.authorities}" >
+					<t th:text="${tempauthority.authority}" />
+				</optional>
+				</td>
+			</tr>
+		</tbody>		
+	</table>
+	<hr>
+	<a th:href="@{/admin/home}"
+			class="btn btn-primary btn-sm mb-3">
+			<b>Back to Home</b>
+	</a>
+</div>
+	
+</body>
+</html>
+
+
+

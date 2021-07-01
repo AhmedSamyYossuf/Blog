@@ -1,0 +1,124 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+				xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+	<title>Save Employee</title>
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" th:href="@{/admin/home}">Home</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" th:href="@{/admin/articles/list}" th:text="Articles"> 
+        	<span class="sr-only">(current)</span> 
+        </a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" th:href="@{/admin/users/list}" th:text="Users"> 
+        	<span class="sr-only">(current)</span> 
+        </a>
+      </li>
+    </ul>
+  </div>
+  
+  <div class="button-group" sec:authorize="!isFullyAuthenticated()">
+    <a href="/login">Login</a>
+    <a href="/register">Register</a>
+</div>
+
+<div class="button-group" sec:authorize="isFullyAuthenticated()">
+    <form action="#" th:action="@{/logout}" method="POST">
+			<input type="submit" value="Logout"> 			 
+	</form>
+</div>
+  
+  <!--  
+    <div>
+	<a class="navbar-brand" th:href="@{/login}">Login</a>
+  </div>
+	<form action="#" th:action="@{/logout}" method="POST">
+			<input type="submit" value="Logout"> 			 
+	</form>
+	-->
+	
+</nav>
+
+	<div class="container">
+		<br>
+		<span th:if="${page_edit} == 'e'">
+			<h3>Edit Article</h3>
+		</span> 
+    	<span th:if="${page_edit} == 'a'">
+    		<h3>Add Article</h3>
+    	</span>
+		<hr>
+		
+		<p class="h4 mb-4"></p>
+	
+		<form action="#" th:action="@{/admin/article/save}"
+						 th:object="${article}" method="POST">
+		
+			<!-- Add hidden form field to handle update -->
+			<input type="hidden" th:field="*{id}" />
+			<!-- Add hidden form field to handle User -->
+			<input type="hidden"  th:field="*{user}"/>
+			<!-- Add hidden form field to handle Category -->
+			<input type="hidden"  th:field="*{categories}"/>
+			<!-- Add hidden form field to handle comments -->
+			<input type="hidden" th:field="*{comments}" />
+			<!-- Add hidden form field to handle Like & disLike -->
+			<input type="hidden" th:field="*{like}" />
+			<input type="hidden" th:field="*{dislike}" />
+			
+			
+			<label> <b>Article Title : </b></label>
+			<input type="text" name="Article_Title" th:field="*{title}"
+					class="form-control mb-4 col-4" placeholder="Article Title">
+
+			<label> <b>Article Description : </b></label>
+			<input type="text" th:field="*{description}"
+					class="form-control mb-4 col-4" placeholder="Article Description">
+
+			<label> <b>Article Body : </b></label>
+			<textarea rows="5" cols="30" th:field="*{articleBody}"
+					class="form-control mb-4 col-4" placeholder="Article Body"> </textarea>
+				
+			<button type="submit" class="btn btn-info col-2">Save</button>
+						
+		</form>
+	
+		<hr>
+		<a th:href="@{/admin/home}"
+			class="btn btn-primary btn-sm mb-3">
+			<b>Back to Home</b>
+		</a>
+		
+	</div>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+

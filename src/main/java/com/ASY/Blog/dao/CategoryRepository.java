@@ -1,0 +1,10 @@
+package com.ASY.Blog.dao;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.ASY.Blog.entity.Category;
+
+public interface CategoryRepository extends JpaRepository<Category, Integer> {
+
+	public Category findBycategory (String category);
+}
